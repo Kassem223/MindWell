@@ -1,0 +1,94 @@
+<app-navbar></app-navbar>
+
+<div class="timers-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Focus Timers</h1>
+      <p>Boost your productivity with structured work and break sessions</p>
+    </div>
+
+    @if (!timerState) {
+      <!-- Timer Selection -->
+      <div class="timer-selection">
+        <h2>Choose a Timer Type</h2>
+        <div class="preset-timers">
+          @for (config of presetConfigs; track config.workDuration) {
+            <div class="timer-card card" (click)="startTimer(config)">
+              <h3>{{ getPresetName(config) }}</h3>
+              <div class="timer-specs">
+                <span>{{ config.workDuration }}min work</span>
+                <span>•</span>
+                <span>{{ config.breakDuration }}min break</span>
+              </div>
+              <button class="btn btn-primary">Start Timer</button>
+            </div>
+          }
+        </div>
+
+        <div class="custom-timer-section">
+          <button class="btn btn-outline" (click)="showCustomForm = !showCustomForm">
+            {{ showCustomForm ? 'Cancel' : 'Create Custom Timer' }}
+          </button>
+
+          @if (showCustomForm) {
+            <div class="custom-timer-form card">
+              <h3>Custom Timer</h3>
+              <div class="form-group">
+                <label>Work Duration (minutes)</label>
+                <input type="number" [(ngModel)]="customConfig.workDuration" min="1" />
+              </div>
+              <div class="form-group">
+                <label>Break Duration (minutes)</label>
+                <input type="number" [(ngModel)]="customConfig.breakDuration" min="1" />
+              </div>
+              <div class="form-group">
+                <label>Number of Sessions</label>
+                <input type="number" [(ngModel)]="customConfig.sessions" min="1" />
+              </div>
+              <button class="btn btn-primary" (click)="createCustomTimer()">Start Custom Timer</button>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <!-- Active Timer -->
+      <div class="active-timer">
+        <div class="timer-display" [class.work-session]="!timerState.isBreak" [class.break-session]="timerState.isBreak">
+          <div class="timer-circle">
+            <svg class="progress-ring" width="300" height="300">
+              <circle
+                class="progress-ring-circle"
+                stroke="currentColor"
+                stroke-width="8"
+                fill="transparent"
+                r="140"
+                cx="150"
+                cy="150"
+                [style.stroke-dasharray]="879.65"
+                [style.stroke-dashoffset]="879.65 - (879.65 * getProgress() / 100)"
+              />
+            </svg>
+            <div class="timer-time">{{ formatTime(timerState.timeRemaining) }}</div>
+            <div class="timer-label">{{ timerState.isBreak ? 'Break Time' : 'Work Session' }}</div>
+            <div class="session-counter">Session {{ timerState.currentSession }} of {{ timerState.config.sessions }}</div>
+          </div>
+        </div>
+
+        <div class="timer-controls">
+          @if (timerState.isRunning) {
+            <button class="btn btn-primary btn-lg" (click)="pauseTimer()">Pause</button>
+          } @else {
+            <button class="btn btn-primary btn-lg" (click)="resumeTimer()">Resume</button>
+          }
+          <button class="btn btn-outline" (click)="resetTimer()">Reset</button>
+          @if (timerState.isBreak) {
+            <button class="btn btn-secondary" (click)="skipBreak()">Skip Break</button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<app-footer></app-footer>
+

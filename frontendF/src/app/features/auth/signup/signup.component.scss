@@ -1,0 +1,252 @@
+.signup-page {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.signup-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: 2rem 1rem;
+}
+
+.signup-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 2.5rem;
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--accent);
+
+    .logo-icon {
+      font-size: 1.75rem;
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+}
+
+.signup-form {
+  margin-bottom: 1.5rem;
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .password-input {
+    position: relative;
+
+    input {
+      padding-right: 3rem;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: var(--accent);
+      }
+    }
+  }
+
+  .password-strength {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+
+    .strength-bar {
+      flex: 1;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+
+      .strength-fill {
+        height: 100%;
+        transition: all var(--transition);
+
+        &.weak {
+          background: var(--error);
+        }
+
+        &.medium {
+          background: var(--warning);
+        }
+
+        &.strong {
+          background: var(--success);
+        }
+      }
+    }
+
+    .strength-text {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &.weak {
+        color: var(--error);
+      }
+
+      &.medium {
+        color: var(--warning);
+      }
+
+      &.strong {
+        color: var(--success);
+      }
+    }
+  }
+
+  .password-requirements {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+
+    li {
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: '○';
+        color: var(--text-secondary);
+      }
+
+      &.valid {
+        color: var(--success);
+
+        &::before {
+          content: '✓';
+          color: var(--success);
+        }
+      }
+    }
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+    margin: 0;
+    font-size: 0.875rem;
+
+    input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+      margin-top: 0.25rem;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+.divider {
+  text-align: center;
+  margin: 2rem 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+
+  span {
+    background: var(--surface);
+    padding: 0 1rem;
+    color: var(--text-secondary);
+    position: relative;
+    font-size: 0.875rem;
+  }
+}
+
+.social-signup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  .social-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+}
+
+.signup-footer {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+
+  p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+

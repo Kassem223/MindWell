@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+
+<div class="admin-dashboard">
+  <div class="container">
+    <div class="page-header">
+      <h1>Admin Dashboard</h1>
+      <p>Manage your MindWell platform</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card card">
+        <h3>Total Users</h3>
+        <div class="stat-value">{{ stats.totalUsers }}</div>
+        <span class="stat-change">+12% from last month</span>
+      </div>
+
+      <div class="stat-card card">
+        <h3>Total Mood Entries</h3>
+        <div class="stat-value">{{ stats.totalMoodEntries }}</div>
+        <span class="stat-change">+8% from last month</span>
+      </div>
+
+      <div class="stat-card card">
+        <h3>Total Tips</h3>
+        <div class="stat-value">{{ stats.totalTips }}</div>
+        <span class="stat-change">Active</span>
+      </div>
+
+      <div class="stat-card card">
+        <h3>Total Psychologists</h3>
+        <div class="stat-value">{{ stats.totalPsychologists }}</div>
+        <span class="stat-change">All active</span>
+      </div>
+    </div>
+
+    <div class="recent-activity card">
+      <h2>Recent Activity</h2>
+      <div class="activity-list">
+        @for (activity of recentActivity; track activity.message) {
+          <div class="activity-item">
+            <div class="activity-icon">{{ activity.type === 'user' ? '👤' : '😊' }}</div>
+            <div class="activity-content">
+              <p>{{ activity.message }}</p>
+              <span class="activity-time">{{ activity.time }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
+

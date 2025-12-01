@@ -1,0 +1,91 @@
+<app-navbar></app-navbar>
+
+<div class="dashboard-page">
+<div class="container">
+
+<!-- Header Section -->
+<header class="dashboard-header">
+  <h1>Welcome back, {{ currentUser()?.name }}! 👋</h1>
+  <p class="current-date">{{ getCurrentDate() }}</p>
+</header>
+
+@if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading your dashboard...</p>
+  </div>
+} @else {
+  <!-- Quick Actions -->
+  <section class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="action-grid">
+      @for (action of quickActions; track action.title) {
+        <a [routerLink]="action.route" class="action-card {{ action.color }}">
+          <span class="action-icon">{{ action.icon }}</span>
+          <h3>{{ action.title }}</h3>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- Streak and Stats -->
+  <section class="stats-section">
+    <div class="stat-card">
+      <h3>Mood Streak 🔥</h3>
+      <p class="stat-value">{{ moodStreak }} Days</p>
+      <p class="stat-description">Keep logging your moods daily!</p>
+    </div>
+    
+    <div class="stat-card">
+      <h3>Latest Mood</h3>
+      @if (recentMoods.length > 0) {
+        <p class="stat-value mood-icon">{{ getEmotionIcon(recentMoods[0].emotion) }}</p>
+        <p class="stat-description">{{ recentMoods[0].emotion | titlecase }}</p>
+      } @else {
+        <p class="stat-value">--</p>
+        <p class="stat-description">Log your first mood.</p>
+      }
+    </div>
+  </section>
+
+  <!-- Daily Tip and Recent Activity -->
+  <div class="content-layout">
+    <section class="daily-tip-card">
+      <h2>Daily Dose of Wisdom 💡</h2>
+      @if (dailyTip) {
+        <h3 class="tip-title">{{ dailyTip.title }}</h3>
+        <p class="tip-content">{{ dailyTip.content }}</p>
+        <a [routerLink]="['/tips', dailyTip.id]" class="btn btn-secondary btn-sm">Read More</a>
+      } @else {
+        <p>No new tips available right now. Check back later!</p>
+      }
+    </section>
+
+    <section class="recent-moods-card">
+      <h2>Recent Moods</h2>
+      @if (recentMoods.length > 0) {
+        <ul>
+          @for (mood of recentMoods; track mood.id) {
+            <li>
+              <span class="mood-icon">{{ getEmotionIcon(mood.emotion) }}</span>
+              <div class="mood-details">
+                <span class="mood-emotion">{{ mood.emotion | titlecase }}</span>
+                <!-- FIX: Check if mood.note exists before accessing .length -->
+                <span class="mood-note">{{ mood.note | slice:0:30 }}{{ mood.note && mood.note.length > 30 ? '...' : '' }}</span>
+              </div>
+              <span class="mood-date">{{ mood.createdAt | date:'shortTime' }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="text-center text-gray-500">No recent mood entries found.</p>
+      }
+    </section>
+  </div>
+}
+
+
+</div>
+</div>
+
+<app-footer></app-footer>

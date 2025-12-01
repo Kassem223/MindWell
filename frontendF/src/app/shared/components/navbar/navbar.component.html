@@ -1,0 +1,63 @@
+<nav class="navbar" [class.scrolled]="scrolled">
+  <div class="container">
+  <div class="nav-content">
+  <a routerLink="/" class="logo">
+  <span class="logo-icon">🧠</span>
+  <span class="logo-text">MindWell</span>
+  </a>
+  
+    @if (currentUser()) {
+      <div class="nav-links">
+        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+        <a routerLink="/profile" routerLinkActive="active">Profile</a>
+        <a routerLink="/tips" routerLinkActive="active">Tips</a>
+        <a routerLink="/timers" routerLinkActive="active">Timers</a>
+        <a routerLink="/psychologists" routerLinkActive="active">Psychologists</a>
+        <a routerLink="/mood" routerLinkActive="active">Mood & Notes</a>
+        @if (isAdmin()) {
+          <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        }
+      </div>
+  
+      <div class="nav-user">
+        <div class="user-menu" (click)="toggleMenu()">
+          <div class="user-avatar">
+            @if (currentUser()?.avatar) {
+              <img [src]="currentUser()?.avatar" [alt]="currentUser()?.name">
+            } @else {
+              <!-- FIX: Use nullish coalescing to guarantee a string before charAt(0) -->
+              <span>{{ (currentUser()?.name || 'U').charAt(0).toUpperCase() }}</span>
+            }
+          </div>
+          <span class="user-name">{{ currentUser()?.name }}</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+  
+        @if (showMenu) {
+          <div class="dropdown-menu">
+            <a routerLink="/profile" (click)="showMenu = false">Profile Settings</a>
+            <button (click)="logout()">Logout</button>
+          </div>
+        }
+      </div>
+  
+      <button class="mobile-menu-btn" (click)="toggleMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    } @else {
+      <div class="nav-auth">
+        <a routerLink="/login" class="btn btn-outline">Login</a>
+        <a routerLink="/signup" class="btn btn-primary">Sign Up</a>
+      </div>
+    }
+  </div>
+  
+  
+  </div>
+  </nav>

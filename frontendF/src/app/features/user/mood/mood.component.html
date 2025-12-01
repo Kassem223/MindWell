@@ -1,0 +1,178 @@
+<app-navbar></app-navbar>
+
+<div class="mood-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Mood Tracker & Notes</h1>
+      <p>Track your emotions and journal your thoughts</p>
+    </div>
+
+    <div class="tabs">
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'mood'"
+        (click)="activeTab = 'mood'"
+      >
+        Mood Tracker
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'notes'"
+        (click)="activeTab = 'notes'"
+      >
+        Notes & Thoughts
+      </button>
+    </div>
+
+    <!-- Mood Tracker Tab -->
+    @if (activeTab === 'mood') {
+      <div class="mood-tracker">
+        <div class="mood-entry-section card">
+          <h2>How are you feeling today?</h2>
+          
+          <div class="emotions-grid">
+            @for (emotion of emotions; track emotion.type) {
+              <button
+                class="emotion-btn"
+                [class.selected]="selectedEmotion === emotion.type"
+                [style.background-color]="selectedEmotion === emotion.type ? emotion.color : 'var(--background)'"
+                (click)="selectEmotion(emotion.type)"
+              >
+                <span class="emotion-emoji">{{ emotion.emoji }}</span>
+                <span class="emotion-label">{{ emotion.label }}</span>
+              </button>
+            }
+          </div>
+
+          @if (selectedEmotion) {
+            <div class="intensity-section">
+              <label>Intensity: {{ intensity }}</label>
+              <input 
+                type="range" 
+                min="1" 
+                max="5" 
+                [(ngModel)]="intensity"
+                class="intensity-slider"
+              />
+              <div class="intensity-labels">
+                <span>Low</span>
+                <span>High</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Add a note about your mood (optional)</label>
+              <textarea 
+                [(ngModel)]="moodNote" 
+                placeholder="What's on your mind?"
+                rows="4"
+              ></textarea>
+            </div>
+
+            <button 
+              class="btn btn-primary" 
+              (click)="saveMood()"
+              [disabled]="loading"
+            >
+              {{ loading ? 'Saving...' : 'Save Mood Entry' }}
+            </button>
+          }
+        </div>
+
+        <div class="mood-history card">
+          <h2>Recent Mood Entries</h2>
+          @if (moods.length > 0) {
+            <div class="moods-list">
+              @for (mood of moods; track mood.id) {
+                <div class="mood-item">
+                  <div class="mood-emoji">{{ getEmotionData(mood.emotion)?.emoji }}</div>
+                  <div class="mood-details">
+                    <div class="mood-header">
+                      <span class="mood-emotion">{{ getEmotionData(mood.emotion)?.label }}</span>
+                      <span class="mood-date">{{ mood.createdAt | date:'short' }}</span>
+                    </div>
+                    <div class="mood-intensity">
+                      @for (i of [1,2,3,4,5]; track i) {
+                        <span class="intensity-dot" [class.active]="i <= mood.intensity"></span>
+                      }
+                    </div>
+                    @if (mood.note) {
+                      <p class="mood-note">{{ mood.note }}</p>
+                    }
+                  </div>
+                  <button class="delete-btn" (click)="deleteMood(mood.id)">×</button>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="empty-state">No mood entries yet. Start tracking your mood!</p>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Notes Tab -->
+    @if (activeTab === 'notes') {
+      <div class="notes-section">
+        <div class="notes-header">
+          <h2>Your Notes & Thoughts</h2>
+          <button class="btn btn-primary" (click)="openNoteEditor()">+ Add Note</button>
+        </div>
+
+        <div class="notes-grid">
+          @for (note of notes; track note.id) {
+            <div class="note-card card">
+              <div class="note-header">
+                <h3>{{ note.title || 'Untitled' }}</h3>
+                <div class="note-actions">
+                  <button class="icon-btn" (click)="openNoteEditor(note)">✏️</button>
+                  <button class="icon-btn" (click)="deleteNote(note.id)">🗑️</button>
+                </div>
+              </div>
+              <p class="note-content">{{ note.content }}</p>
+              <span class="note-date">{{ note.createdAt | date:'short' }}</span>
+            </div>
+          }
+        </div>
+
+        @if (notes.length === 0) {
+          <div class="empty-state card">
+            <p>No notes yet. Click "Add Note" to start journaling!</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Note Editor Modal -->
+@if (showNoteEditor) {
+  <div class="modal-overlay" (click)="closeNoteEditor()">
+    <div class="modal-content card" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeNoteEditor()">×</button>
+      <h2>{{ editingNote ? 'Edit Note' : 'New Note' }}</h2>
+      
+      <div class="form-group">
+        <label>Title (optional)</label>
+        <input type="text" [(ngModel)]="noteTitle" placeholder="Note title..." />
+      </div>
+
+      <div class="form-group">
+        <label>Content</label>
+        <textarea 
+          [(ngModel)]="noteContent" 
+          placeholder="Write your thoughts here..."
+          rows="10"
+        ></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-outline" (click)="closeNoteEditor()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveNote()">Save Note</button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-footer></app-footer>
+

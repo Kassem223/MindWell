@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+
+<div class="psychologist-management">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1>Psychologist Management</h1>
+        <p>Manage psychologist profiles</p>
+      </div>
+      <button class="btn btn-primary">+ Add New Psychologist</button>
+    </div>
+
+    <div class="psychologists-table card">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Specialization</th>
+            <th>Rating</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (psychologist of psychologists; track psychologist.id) {
+            <tr>
+              <td>{{ psychologist.name }}</td>
+              <td>{{ psychologist.email }}</td>
+              <td>{{ psychologist.specialization }}</td>
+              <td>{{ psychologist.rating }} ⭐</td>
+              <td><span class="status-badge">{{ psychologist.status }}</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline">Edit</button>
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
+

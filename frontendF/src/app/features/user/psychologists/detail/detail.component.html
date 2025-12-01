@@ -1,0 +1,116 @@
+<app-navbar></app-navbar>
+
+<div class="psychologist-detail-page">
+  <div class="container">
+    @if (loading) {
+      <div class="loading">Loading psychologist profile...</div>
+    } @else if (psychologist) {
+      <button class="back-btn" (click)="goBack()">← Back to Directory</button>
+
+      <div class="detail-layout">
+        <!-- Left Column -->
+        <div class="detail-sidebar card">
+          <div class="profile-photo">
+            @if (psychologist.photo) {
+              <img [src]="psychologist.photo" [alt]="psychologist.name">
+            } @else {
+              <div class="photo-placeholder">
+                {{ psychologist.name.charAt(0) }}
+              </div>
+            }
+          </div>
+
+          <h2>{{ psychologist.name }}</h2>
+          <p class="credentials">Licensed Clinical Psychologist</p>
+
+          <div class="rating-section">
+            <div class="rating">
+              @for (star of getStars(psychologist.rating); track $index) {
+                <span class="star">★</span>
+              }
+              <span class="rating-value">{{ psychologist.rating }}</span>
+            </div>
+            <p class="reviews">{{ psychologist.reviewsCount }} reviews</p>
+          </div>
+
+          <div class="contact-buttons">
+            <button class="btn btn-primary" (click)="sendEmail()">
+              Send Email
+            </button>
+            <button class="btn btn-outline" (click)="callNow()">
+              Call Now
+            </button>
+          </div>
+
+          <div class="availability">
+            <span class="availability-label">Availability:</span>
+            <span class="availability-status" [class.available]="psychologist.availability === 'available'">
+              {{ psychologist.availability === 'available' ? 'Available' : 'Busy' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="detail-content">
+          <div class="content-section card">
+            <h3>About</h3>
+            <p>{{ psychologist.bio }}</p>
+          </div>
+
+          <div class="content-section card">
+            <h3>Specializations</h3>
+            <div class="specializations">
+              @for (spec of psychologist.specialization; track spec) {
+                <span class="spec-badge">{{ spec }}</span>
+              }
+            </div>
+          </div>
+
+          @if (psychologist.education && psychologist.education.length > 0) {
+            <div class="content-section card">
+              <h3>Education & Certifications</h3>
+              <ul class="education-list">
+                @for (edu of psychologist.education; track edu) {
+                  <li>{{ edu }}</li>
+                }
+              </ul>
+              @if (psychologist.certifications) {
+                <ul class="certifications-list">
+                  @for (cert of psychologist.certifications; track cert) {
+                    <li>{{ cert }}</li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+
+          <div class="content-section card">
+            <h3>Languages</h3>
+            <div class="languages">
+              @for (lang of psychologist.languages; track lang) {
+                <span class="language-badge">{{ lang }}</span>
+              }
+            </div>
+          </div>
+
+          @if (psychologist.approach) {
+            <div class="content-section card">
+              <h3>Approach & Methods</h3>
+              <p>{{ psychologist.approach }}</p>
+            </div>
+          }
+
+          @if (psychologist.sessionFees) {
+            <div class="content-section card">
+              <h3>Session Fees</h3>
+              <p class="fee-amount">${{ psychologist.sessionFees }} per session</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<app-footer></app-footer>
+

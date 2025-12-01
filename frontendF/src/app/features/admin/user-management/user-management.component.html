@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<div class="user-management">
+  <div class="container">
+    <div class="page-header">
+      <h1>User Management</h1>
+      <p>Manage platform users</p>
+    </div>
+
+    <div class="users-table card">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Joined</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track user.id) {
+            <tr>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td><span class="role-badge" [class.admin]="user.role === 'admin'">{{ user.role }}</span></td>
+              <td>{{ user.joined }}</td>
+              <td><span class="status-badge">{{ user.status }}</span></td>
+              <td>
+                <button class="btn btn-sm btn-outline">Edit</button>
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
+

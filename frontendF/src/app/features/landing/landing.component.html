@@ -1,0 +1,65 @@
+<app-navbar></app-navbar>
+
+<section class="hero gradient-bg">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Your Journey to Mental Wellness Starts Here</h1>
+      <p class="hero-subtitle">
+        Track your mood, connect with professionals, and improve your mental health with MindWell.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/signup" class="btn btn-primary btn-lg">Get Started</a>
+        <a routerLink="/login" class="btn btn-outline btn-lg">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-illustration">
+      <div class="illustration-shape shape-1"></div>
+      <div class="illustration-shape shape-2"></div>
+      <div class="illustration-shape shape-3"></div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <h2 class="section-title">Features</h2>
+    <p class="section-subtitle">Everything you need to take control of your mental wellness</p>
+    <div class="features-grid">
+      @for (feature of features; track feature.title) {
+        <div class="feature-card card">
+          <div class="feature-icon">{{ feature.icon }}</div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="how-it-works">
+  <div class="container">
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps-container">
+      @for (step of steps; track step.number) {
+        <div class="step-card">
+          <div class="step-number">{{ step.number }}</div>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="cta-section gradient-bg">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Ready to take control of your mental health?</h2>
+      <p>Join thousands of users who are improving their wellness every day</p>
+      <a routerLink="/signup" class="btn btn-primary btn-lg">Start Your Journey</a>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
+

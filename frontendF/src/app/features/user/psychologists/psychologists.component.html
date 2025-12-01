@@ -1,0 +1,104 @@
+<app-navbar></app-navbar>
+
+<div class="psychologists-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Find Your Perfect Therapist</h1>
+      <p>Connect with licensed mental health professionals</p>
+    </div>
+
+    <div class="search-filter-bar card">
+      <div class="search-input">
+        <input 
+          type="text" 
+          placeholder="Search by name or specialization..." 
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="search()"
+        />
+        <button class="btn btn-primary" (click)="search()">Search</button>
+      </div>
+
+      <div class="filters">
+        <select [(ngModel)]="selectedSpecialization" (change)="filter()">
+          <option value="">All Specializations</option>
+          @for (spec of specializations; track spec) {
+            <option [value]="spec">{{ spec }}</option>
+          }
+        </select>
+
+        <select [(ngModel)]="selectedLocation" (change)="filter()">
+          <option value="">All Locations</option>
+          @for (location of locations; track location) {
+            <option [value]="location">{{ location }}</option>
+          }
+        </select>
+
+        <select [(ngModel)]="sortBy" (change)="sort()">
+          <option value="rating">Sort by Rating</option>
+          <option value="experience">Sort by Experience</option>
+          <option value="name">Sort by Name</option>
+        </select>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="loading">Loading psychologists...</div>
+    } @else {
+      <div class="psychologists-grid">
+        @for (psychologist of filteredPsychologists; track psychologist.id) {
+          <div class="psychologist-card card">
+            <div class="psychologist-header">
+              <div class="psychologist-photo">
+                @if (psychologist.photo) {
+                  <img [src]="psychologist.photo" [alt]="psychologist.name">
+                } @else {
+                  <div class="photo-placeholder">
+                    {{ psychologist.name.charAt(0) }}
+                  </div>
+                }
+              </div>
+              <div class="psychologist-info">
+                <h3>{{ psychologist.name }}</h3>
+                <div class="rating">
+                  @for (star of getStars(psychologist.rating); track $index) {
+                    <span class="star">★</span>
+                  }
+                  <span class="rating-value">{{ psychologist.rating }}</span>
+                  <span class="reviews">({{ psychologist.reviewsCount }} reviews)</span>
+                </div>
+              </div>
+              <div class="availability-badge" [class.available]="psychologist.availability === 'available'">
+                {{ psychologist.availability === 'available' ? 'Available' : 'Busy' }}
+              </div>
+            </div>
+
+            <div class="specializations">
+              @for (spec of psychologist.specialization; track spec) {
+                <span class="spec-badge">{{ spec }}</span>
+              }
+            </div>
+
+            <div class="psychologist-details">
+              <p class="experience">{{ psychologist.experience }} years of experience</p>
+              <p class="location">📍 {{ psychologist.location }}</p>
+              <p class="languages">Languages: {{ psychologist.languages.join(', ') }}</p>
+            </div>
+
+            <button class="btn btn-primary" (click)="viewProfile(psychologist.id)">
+              View Profile
+            </button>
+          </div>
+        }
+      </div>
+
+      @if (filteredPsychologists.length === 0) {
+        <div class="empty-state">
+          <p>No psychologists found. Try adjusting your search or filters.</p>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+<app-footer></app-footer>
+

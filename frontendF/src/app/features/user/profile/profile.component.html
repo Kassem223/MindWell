@@ -1,0 +1,174 @@
+<app-navbar></app-navbar>
+
+<div class="profile-page">
+<div class="container">
+<div class="profile-content">
+
+  <!-- User Summary Card -->
+  <div class="profile-summary">
+    <div class="avatar-container">
+      <!-- FIX: Invoke the signal -->
+      @if (currentUser()) {
+        <div class="user-avatar">
+          <!-- FIX: Invoke the signal and use safe navigation -->
+          @if (currentUser()?.avatar) {
+            <img [src]="currentUser()?.avatar" [alt]="currentUser()?.name">
+          } @else {
+            <!-- FIX: Invoke the signal and use safe navigation -->
+            <span>{{ currentUser()?.name ? currentUser()!.name.charAt(0).toUpperCase() : 'U' }}</span>
+          }
+        </div>
+      }
+      <button class="edit-avatar-btn" title="Change Avatar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5l-2.5 2.5l4 4l2.5-2.5c.34-.34.34-.9 0-1.24l-2.76-2.76c-.34-.34-.9-.34-1.24 0z"></path>
+          <path d="M19 14V5"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- FIX: Invoke the signal and use safe navigation -->
+    <h2>{{ currentUser()?.name || 'User' }}</h2>
+    <p class="user-email">{{ currentUser()?.email || '' }}</p>
+    <p class="member-since">Member since {{ getMemberSince() }}</p>
+  </div>
+
+  <!-- Settings Tabs -->
+  <div class="profile-settings-container">
+    <div class="tab-buttons">
+      <button [class.active]="activeTab === 'personal'" (click)="setActiveTab('personal')">Personal Info</button>
+      <button [class.active]="activeTab === 'settings'" (click)="setActiveTab('settings')">Settings</button>
+      <button [class.active]="activeTab === 'password'" (click)="setActiveTab('password')">Security</button>
+    </div>
+
+    <div class="tab-content">
+      <!-- Success Message -->
+      @if (successMessage) {
+        <div class="success-alert">{{ successMessage }}</div>
+      }
+
+      <!-- Personal Info Form -->
+      @if (activeTab === 'personal') {
+        <form [formGroup]="personalForm" (ngSubmit)="savePersonalInfo()" class="settings-form">
+          <h3>Update Personal Details</h3>
+
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input id="name" type="text" formControlName="name" placeholder="Enter your full name">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" formControlName="email" placeholder="Enter your email address">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number (Optional)</label>
+            <input id="phone" type="tel" formControlName="phone" placeholder="Enter your phone number">
+          </div>
+
+          <button type="submit" [disabled]="personalForm.invalid || loading" class="btn btn-primary">
+            @if (loading) {
+              Saving...
+            } @else {
+              Save Changes
+            }
+          </button>
+        </form>
+      }
+
+      <!-- Settings Form -->
+      @if (activeTab === 'settings') {
+        <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()" class="settings-form">
+          <h3>General Preferences</h3>
+          
+          <div class="form-group checkbox-group">
+            <input id="notifications" type="checkbox" formControlName="notifications">
+            <label for="notifications">Enable Daily Notifications</label>
+          </div>
+
+          <div class="form-group">
+            <label for="notificationFrequency">Notification Frequency</label>
+            <select id="notificationFrequency" formControlName="notificationFrequency">
+              <option value="1h">Every Hour</option>
+              <option value="4h">Every 4 Hours</option>
+              <option value="day">Once Daily</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="theme">App Theme</label>
+            <select id="theme" formControlName="theme">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="language">Language</label>
+            <select id="language" formControlName="language">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+            </select>
+          </div>
+
+          <button type="submit" [disabled]="loading" class="btn btn-primary">
+            @if (loading) {
+              Saving...
+            } @else {
+              Save Settings
+            }
+          </button>
+        </form>
+      }
+
+      <!-- Password Form -->
+      @if (activeTab === 'password') {
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="settings-form">
+          <h3>Change Password</h3>
+          
+          <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <input id="currentPassword" type="password" formControlName="currentPassword">
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input id="newPassword" type="password" formControlName="newPassword">
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input id="confirmPassword" type="password" formControlName="confirmPassword">
+          </div>
+
+          <button type="submit" [disabled]="passwordForm.invalid || loading" class="btn btn-primary">
+            @if (loading) {
+              Changing...
+            } @else {
+              Change Password
+            }
+          </button>
+
+          <hr class="my-6">
+          
+          <!-- Account Deletion -->
+          <h3 class="text-red-600">Danger Zone</h3>
+          <p class="text-sm text-gray-500 mb-4">Permanently delete your account and all associated data.</p>
+          <button type="button" (click)="deleteAccount()" class="btn btn-danger">
+            Delete My Account
+          </button>
+
+        </form>
+      }
+    </div>
+  </div>
+</div>
+
+
+</div>
+</div>
+
+<app-footer></app-footer>
