@@ -51,6 +51,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/user/mood/mood.component').then(m => m.MoodComponent)
   },
   {
+    path: 'wellness',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/wellness/wellness.component').then(m => m.WellnessComponent)
+  },
+  {
     path: 'admin',
     canActivate: [authGuard, adminGuard],
     children: [

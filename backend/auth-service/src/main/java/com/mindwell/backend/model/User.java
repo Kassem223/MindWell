@@ -1,6 +1,8 @@
 package com.mindwell.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +33,7 @@ public class User {
 
     private String avatar;
 
-    private Set<Role> roles; // USER, ADMIN
+    private Set<Role> roles; // USER, ADMIN, PSYCHOLOGIST
 
     private boolean notificationEnabled = true;
 
@@ -47,6 +49,22 @@ public class User {
 
     public enum Role {
         USER,
-        ADMIN
+        ADMIN,
+        PSYCHOLOGIST;
+
+        // This allows MongoDB to have lowercase "admin" and convert it to ADMIN
+        // automatically
+        @JsonCreator
+        public static Role fromString(String value) {
+            if (value == null) {
+                return null;
+            }
+            return Role.valueOf(value.toUpperCase());
+        }
+
+        @JsonValue
+        public String toJson() {
+            return this.name();
+        }
     }
 }

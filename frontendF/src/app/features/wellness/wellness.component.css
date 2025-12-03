@@ -1,0 +1,64 @@
+.wellness-page {
+    min-height: calc(100vh - 80px);
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e6eaf0 100%);
+}
+
+.wellness-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.wellness-header h1 {
+    font-size: 3rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.wellness-header p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.wellness-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.wellness-tabs button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border: none;
+    background: white;
+    color: var(--text-secondary);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+.wellness-tabs button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wellness-tabs button.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
+}
+
+.wellness-content {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,35 @@
+<div class="meditation-container">
+    <div class="player-card" [class.active]="currentTrack">
+        @if (currentTrack) {
+        <div class="now-playing">
+            <div class="track-icon">🎵</div>
+            <div class="track-info">
+                <h3>{{ currentTrack.title }}</h3>
+                <p>{{ currentTrack.category }} • {{ currentTrack.duration }}</p>
+            </div>
+            <button class="btn-play-large" (click)="togglePlay()">
+                {{ isPlaying ? '⏸️' : '▶️' }}
+            </button>
+        </div>
+        } @else {
+        <div class="placeholder-player">
+            <p>Select a track to start meditating</p>
+        </div>
+        }
+    </div>
+
+    <div class="track-list">
+        @for (track of tracks; track track.id) {
+        <div class="track-item" [class.playing]="currentTrack?.id === track.id" (click)="playTrack(track)">
+            <div class="track-icon-small">
+                {{ currentTrack?.id === track.id && isPlaying ? '🔊' : '▶️' }}
+            </div>
+            <div class="track-details">
+                <h4>{{ track.title }}</h4>
+                <span class="track-meta">{{ track.category }}</span>
+            </div>
+            <div class="track-duration">{{ track.duration }}</div>
+        </div>
+        }
+    </div>
+</div>

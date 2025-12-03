@@ -28,7 +28,10 @@ export class AuthService {
 
   // Computed signals
   public isAuthenticated = computed(() => !!this.currentUser());
-  public isAdmin = computed(() => this.currentUser()?.role === 'admin');
+  public isAdmin = computed(() => {
+    const roles = this.currentUser()?.roles;
+    return Array.isArray(roles) && roles.includes('ADMIN');
+  });
   public token = signal<string | null>(null);
 
   constructor(
@@ -43,7 +46,7 @@ export class AuthService {
         this.loadUserFromStorage();
       }, 0);
     }
-    
+
     // Effect to handle navigation intents
     effect(() => {
       const intent = this.authIntent();
@@ -63,7 +66,7 @@ export class AuthService {
         this.setToken(response.token);
         this.isLoading.set(false);
         this.error.set(null);
-        
+
         // After successful login, fetch user info then navigate
         this.fetchUserInfoAndNavigate('login');
       }),
@@ -84,9 +87,9 @@ export class AuthService {
     return this.http.post<void>(`${API_URL}/auth/register`, data).pipe(
       // The map converts the successful void response into the login observable
       switchMap(() => {
-        const loginRequest: LoginRequest = { 
-          email: data.email, 
-          password: data.password 
+        const loginRequest: LoginRequest = {
+          email: data.email,
+          password: data.password
         };
         // Execute login to get the token and user info immediately
         return this.login(loginRequest);
@@ -152,7 +155,7 @@ export class AuthService {
       tap(user => {
         this.currentUser.set(user);
         this.token.set(this.isBrowser ? localStorage.getItem(AUTH_TOKEN_KEY) : null);
-        
+
         if (this.isBrowser) {
           localStorage.setItem('user', JSON.stringify(user));
         }
@@ -172,7 +175,7 @@ export class AuthService {
 
   logout(): void {
     this.authIntent.set('logout');
-    
+
     if (this.isBrowser) {
       localStorage.removeItem(AUTH_TOKEN_KEY);
       localStorage.removeItem('user');
@@ -184,6 +187,18 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${API_URL}/auth/users`);
+  }
+
+  updateUser(id: string, updates: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${API_URL}/auth/users/${id}`, updates);
+  }
+
+  deleteUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/auth/users/${id}`);
+  }
+
   getToken(): string | null {
     return this.token() || (this.isBrowser ? localStorage.getItem(AUTH_TOKEN_KEY) : null);
   }
@@ -191,12 +206,12 @@ export class AuthService {
   // Navigation intent handler
   private handleAuthIntent(intent: AuthIntent): void {
     const user = this.currentUser();
-    
+
     switch (intent) {
       case 'login':
       case 'signup':
         if (user) {
-          if (user.role === 'admin') {
+          if ((user.roles || []).includes('ADMIN')) {
             this.router.navigate(['/admin/dashboard']);
           } else {
             this.router.navigate(['/home']);
@@ -214,12 +229,12 @@ export class AuthService {
         this.router.navigate(['/home']);
         break;
       case 'admin':
-        if (user?.role === 'admin') {
+        if ((user?.roles || []).includes('ADMIN')) {
           this.router.navigate(['/admin/dashboard']);
         }
         break;
     }
-    
+
     setTimeout(() => this.authIntent.set(null), 0);
   }
 
@@ -244,7 +259,7 @@ export class AuthService {
         if (this.isBrowser) {
           localStorage.setItem('user', JSON.stringify(user));
         }
-        
+
         // Navigate after user is loaded
         this.authIntent.set(intent);
       },
@@ -257,14 +272,14 @@ export class AuthService {
   }
 
   private loadUserFromStorage(): void {
-    if (!this.isBrowser) return; 
-    
+    if (!this.isBrowser) return;
+
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     const userStr = localStorage.getItem('user');
-    
+
     if (token) {
       this.token.set(token);
-      
+
       if (userStr) {
         try {
           const user = JSON.parse(userStr);
@@ -276,7 +291,7 @@ export class AuthService {
           });
         } catch (e) {
           // FIX: Using 'home' intent is now valid
-          this.fetchUserInfoAndNavigate('home'); 
+          this.fetchUserInfoAndNavigate('home');
         }
       } else {
         // FIX: Using 'home' intent is now valid

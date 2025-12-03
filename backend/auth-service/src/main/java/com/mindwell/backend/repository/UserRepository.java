@@ -17,9 +17,15 @@ public interface UserRepository extends MongoRepository<User, String> {
      * @param email The user's email address.
      * @return An Optional containing the User if found, or empty otherwise.
      */
-    @Query("{ 'name': ?0 }")
+    /**
+     * Finds a user by email. Let Spring Data derive the query from the method name.
+     */
     Optional<User> findByEmail(String email);
-    Optional<User> findByname(String name);
+
+    /**
+     * Finds a user by name.
+     */
+    Optional<User> findByName(String name);
 
     /**
      * Finds a User document by their Google ID.
@@ -28,8 +34,10 @@ public interface UserRepository extends MongoRepository<User, String> {
      * @return An Optional containing the User if found, or empty otherwise.
      */
     Optional<User> findByGoogleId(String googleId);
-    boolean existsByName(String name); // ← Changed from existsByUsername
+    boolean existsByName(String name);
 
     boolean existsByEmail(String email);
-    // You can add more methods here, e.g., findByPhone(String phone)
+    // Find all users with ADMIN role
+    @Query("{ 'roles': 'ADMIN' }")
+    java.util.List<User> findAllAdmins();
 }

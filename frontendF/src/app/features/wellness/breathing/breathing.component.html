@@ -1,0 +1,15 @@
+<div class="breathing-container">
+    <div class="breathing-circle-wrapper">
+        <div class="breathing-circle" [ngClass]="phase">
+            <div class="instruction-text">{{ instruction }}</div>
+        </div>
+        <div class="orbit-dot" [ngClass]="{ 'active': isActive }"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-start" (click)="toggleExercise()" [ngClass]="{ 'active': isActive }">
+            {{ isActive ? 'Stop Exercise' : 'Start Breathing' }}
+        </button>
+        <p class="technique-info">4-7-8 Technique: Inhale 4s, Hold 7s, Exhale 8s</p>
+    </div>
+</div>

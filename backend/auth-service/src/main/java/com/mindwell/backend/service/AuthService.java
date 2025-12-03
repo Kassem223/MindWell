@@ -24,6 +24,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
+    /**
+     * ADMIN: Get all users (dashboard)
+     */
+    public java.util.List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     // --- Registration ---
     public User registerUser(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -57,13 +64,44 @@ public class AuthService {
         // Generate and return JWT token
         return jwtUtils.generateToken(user.getEmail(), user.getRoles());
     }
+
     /**
      * NEW METHOD: Get user by username
      * Used by the /me endpoint
      */
     public User getUserByUsername(String username) {
-        return userRepository.findByname(username)
+        // Tokens use the email as the subject. The controller expects to find users by
+        // email.
+        return userRepository.findByEmail(username)
                 .orElse(null);
+    }
+
+    /**
+     * ADMIN: Update user details
+     */
+    public User updateUser(String id, User updates) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        if (updates.getName() != null) {
+            user.setName(updates.getName());
+        }
+        if (updates.getEmail() != null) {
+            user.setEmail(updates.getEmail());
+        }
+        // Add other fields as needed
+
+        return userRepository.save(user);
+    }
+
+    /**
+     * ADMIN: Delete user
+     */
+    public void deleteUser(String id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
     }
 
 }

@@ -2,6 +2,7 @@ package com.mindwell.api_gateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
@@ -11,6 +12,7 @@ import java.util.Arrays;
 public class CorsConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(CorsWebFilter.class)
     public CorsWebFilter corsWebFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final org.springframework.web.cors.CorsConfiguration corsConfig = new org.springframework.web.cors.CorsConfiguration();

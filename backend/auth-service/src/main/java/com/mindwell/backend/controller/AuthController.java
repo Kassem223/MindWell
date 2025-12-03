@@ -25,6 +25,26 @@ public class AuthController {
     private final AuthService authService;
 
     /**
+     * ADMIN: Get all users (dashboard)
+     * Only accessible to users with 'ADMIN' role
+     */
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
+        }
+        // Check if user has ADMIN role
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        // Return all users
+        java.util.List<User> users = authService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    /**
      * Endpoint for user registration.
      * Accessible publicly due to configuration in SecurityConfig.
      */
@@ -37,6 +57,7 @@ public class AuthController {
     /**
      * Endpoint for user login and JWT token generation.
      * Accessible publicly due to configuration in SecurityConfig.
+     * 
      * @return ResponseEntity containing a JSON object: {"token": "jwt_string"}
      */
     @PostMapping("/login")
@@ -77,7 +98,8 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
             }
 
-            // Return user info (password is already excluded via @JsonIgnore in User entity)
+            // Return user info (password is already excluded via @JsonIgnore in User
+            // entity)
             return ResponseEntity.ok(user);
 
         } catch (Exception e) {
@@ -85,5 +107,46 @@ public class AuthController {
             error.put("error", "Failed to fetch user info: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
+    }
+
+    /**
+     * ADMIN: Update user
+     */
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User updates,
+            Authentication authentication) {
+        if (!isAdmin(authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        try {
+            User updatedUser = authService.updateUser(id, updates);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * ADMIN: Delete user
+     */
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id, Authentication authentication) {
+        if (!isAdmin(authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        try {
+            authService.deleteUser(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+        return authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 }

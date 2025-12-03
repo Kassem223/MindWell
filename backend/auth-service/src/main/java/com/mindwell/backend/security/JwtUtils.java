@@ -42,4 +42,40 @@ public class JwtUtils {
                 .signWith(getSigningKey())
                 .compact();
     }
+
+    // Parse claims from token
+    public Claims getAllClaimsFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String getUsernameFromToken(String token) {
+        return getAllClaimsFromToken(token).getSubject();
+    }
+
+    @SuppressWarnings("unchecked")
+    public java.util.List<String> getRolesFromToken(String token) {
+        Object roles = getAllClaimsFromToken(token).get("roles");
+        if (roles instanceof java.util.List) {
+            return (java.util.List<String>) roles;
+        }
+        return java.util.Collections.emptyList();
+    }
+
+    public boolean isTokenExpired(String token) {
+        Date expirationDate = getAllClaimsFromToken(token).getExpiration();
+        return expirationDate.before(new Date());
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Claims claims = getAllClaimsFromToken(token);
+            return claims.getSubject() != null && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

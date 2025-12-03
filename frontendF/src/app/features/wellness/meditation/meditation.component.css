@@ -1,0 +1,153 @@
+.meditation-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.player-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    color: white;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.player-card.active {
+    justify-content: space-between;
+}
+
+.placeholder-player {
+    text-align: center;
+    opacity: 0.8;
+    font-size: 1.1rem;
+}
+
+.now-playing {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+}
+
+.track-icon {
+    font-size: 3rem;
+    background: rgba(255, 255, 255, 0.2);
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.track-info {
+    flex: 1;
+}
+
+.track-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.track-info p {
+    margin: 0;
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.btn-play-large {
+    background: white;
+    color: #764ba2;
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-play-large:hover {
+    transform: scale(1.1);
+}
+
+.track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.track-item:hover {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateX(5px);
+}
+
+.track-item.playing {
+    background: white;
+    border-color: #764ba2;
+    box-shadow: 0 4px 12px rgba(118, 75, 162, 0.1);
+}
+
+.track-icon-small {
+    width: 40px;
+    height: 40px;
+    background: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+    color: #764ba2;
+    font-size: 0.9rem;
+}
+
+.track-item.playing .track-icon-small {
+    background: #764ba2;
+    color: white;
+}
+
+.track-details {
+    flex: 1;
+}
+
+.track-details h4 {
+    margin: 0 0 0.25rem 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.track-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: #e9ecef;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+}
+
+.track-duration {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}

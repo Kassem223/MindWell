@@ -9,10 +9,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -21,21 +27,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                // Disable CSRF (important for REST APIs)
-                .csrf(AbstractHttpConfigurer::disable)
+    http
+        // Disable CSRF (important for REST APIs)
+        .csrf(AbstractHttpConfigurer::disable)
 
-                // Stateless session management
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // Stateless session management
+        .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // Authorization rules
-                .authorizeRequests(auth -> auth
-                        // Allow all auth endpoints without authentication
-                        .antMatchers("/api/auth/**").permitAll()
-                        // All other requests require authentication
-                        .anyRequest().authenticated()
-                );
+        // Authorization rules
+        .authorizeRequests(auth -> auth
+            // Allow only register and login endpoints without authentication
+            .antMatchers("/api/auth/register", "/api/auth/login").permitAll()
+            // All other requests require authentication
+            .anyRequest().authenticated()
+        );
 
-        return http.build();
+    // Insert the JWT token processing filter so the SecurityContext is populated
+    http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
     }
 }

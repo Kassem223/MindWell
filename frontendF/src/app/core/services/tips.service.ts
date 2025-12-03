@@ -9,7 +9,7 @@ const API_URL = 'http://localhost:8080/api';
   providedIn: 'root'
 })
 export class TipsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getTips(category?: TipCategory): Observable<Tip[]> {
     let params = new HttpParams();

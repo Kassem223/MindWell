@@ -1,0 +1,123 @@
+.breathing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 2rem;
+}
+
+.breathing-circle-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.breathing-circle {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(168, 237, 234, 0.5);
+    transition: all 0.5s ease-in-out;
+    position: relative;
+    z-index: 2;
+}
+
+.instruction-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #555;
+    text-align: center;
+}
+
+/* Animations */
+.breathing-circle.inhale {
+    width: 280px;
+    height: 280px;
+    transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Inhale 4s */
+    box-shadow: 0 0 40px rgba(168, 237, 234, 0.8);
+}
+
+.breathing-circle.hold {
+    width: 280px;
+    height: 280px;
+    transition: all 0.5s ease;
+    /* Transition to hold state */
+    box-shadow: 0 0 50px rgba(254, 214, 227, 0.8);
+}
+
+.breathing-circle.exhale {
+    width: 150px;
+    height: 150px;
+    transition: all 8s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Exhale 8s */
+    box-shadow: 0 0 20px rgba(168, 237, 234, 0.5);
+}
+
+.orbit-dot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 50%;
+    top: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.orbit-dot.active {
+    opacity: 1;
+    animation: orbit 19s linear infinite;
+    /* 4+7+8 = 19s cycle */
+}
+
+@keyframes orbit {
+    0% {
+        transform: rotate(0deg) translateX(150px) rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg) translateX(150px) rotate(-360deg);
+    }
+}
+
+.controls {
+    text-align: center;
+}
+
+.btn-start {
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
+    margin-bottom: 1rem;
+}
+
+.btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.4);
+}
+
+.btn-start.active {
+    background: #ff6b6b;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.technique-info {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}

@@ -1,0 +1,29 @@
+<app-navbar></app-navbar>
+
+<div class="wellness-page">
+    <div class="container">
+        <header class="wellness-header">
+            <h1>Wellness Center</h1>
+            <p>Take a moment to breathe, relax, and find your center.</p>
+        </header>
+
+        <div class="wellness-tabs">
+            <button [class.active]="activeTab === 'breathing'" (click)="setActiveTab('breathing')">
+                🌬️ Breathing Exercise
+            </button>
+            <button [class.active]="activeTab === 'meditation'" (click)="setActiveTab('meditation')">
+                🧘 Guided Meditation
+            </button>
+        </div>
+
+        <div class="wellness-content">
+            @if (activeTab === 'breathing') {
+            <app-breathing></app-breathing>
+            } @else {
+            <app-meditation></app-meditation>
+            }
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>
