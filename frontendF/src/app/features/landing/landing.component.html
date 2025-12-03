@@ -61,5 +61,43 @@
   </div>
 </section>
 
+
+<section class="ai-mentor-section">
+  <div class="container">
+    <h2>MindWell AI Mentor</h2>
+    <p>Share your current feelings or vision of your mental state, and receive personalized, encouraging steps for improvement from our AI.</p>
+    
+    <form (ngSubmit)="submitAssessment()" class="assessment-form">
+      <textarea 
+        name="assessment"
+        rows="8" 
+        placeholder="E.g., 'I feel overwhelmed by my work schedule, anxious about the future, and have trouble maintaining focus.'"
+        [(ngModel)]="userAssessment"
+        required
+      ></textarea>
+      
+      <button type="submit" [disabled]="isLoading">
+        <span *ngIf="isLoading">Generating Advice...</span>
+        <span *ngIf="!isLoading">Get My Recommendation</span>
+      </button>
+    </form>
+
+    <div class="result-area">
+      <div *ngIf="isLoading" class="status-message loading">
+        Analyzing your thoughts and generating a compassionate response...
+      </div>
+
+      <div *ngIf="error" class="status-message error">
+        <strong>Error:</strong> {{ error }}
+      </div>
+
+      <div *ngIf="aiRecommendation" class="recommendation-output">
+        <h3>Your Personalized Recommendation:</h3>
+        <div class="ai-text" [innerHTML]="aiRecommendation"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <app-footer></app-footer>
 
