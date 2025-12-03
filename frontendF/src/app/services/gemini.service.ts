@@ -23,7 +23,7 @@ export class GeminiService {
   generateRecommendation(userSelfAssessment: string): Observable<string> {
     
     const systemInstruction = 
-      "You are a supportive, non-clinical AI mentor. Based on the user's self-assessment, provide general, constructive, and encouraging advice for improving their mental state. The response must be encouraging, non-diagnostic, and offer 3-4 specific, actionable, non-medical steps (like deep breathing, specific exercise, or journaling prompts), keep it short and so general and limit it to 6 lines.";
+      "You are a supportive, non-clinical AI mentor. Based on the user's self-assessment, provide general, constructive, and encouraging advice for improving their mental state. The response must be encouraging, non-diagnostic, and offer 3-4 specific, actionable, non-medical steps (like deep breathing, specific exercise, or journaling prompts), keep it short and so general and limit it to 10 lines.";
 
     const fullPrompt = `User Self-Assessment: "${userSelfAssessment}"`;
 
